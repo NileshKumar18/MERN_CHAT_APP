@@ -20,9 +20,9 @@ const signupController = async (req, res) => {
             password: hash,
             isOnline: false,
         })
-        const token = jwt.sign({ email:user.email , userId : user._id }, process.env.JWT_SECRET)
+        const token = jwt.sign({ email: user.email, userId: user._id }, process.env.JWT_SECRET)
         res
-            .cookie("token", token)
+            .cookie("token", token, { httpOnly: true })
             .status(200).json({
                 message: "User created Successfully"
             })

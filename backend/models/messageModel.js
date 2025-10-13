@@ -11,7 +11,7 @@ const messageSchema = new mongoose.Schema({
         ref:"chat",
         required:true,
     },
-    message:{
+    content:{
         type:String,
         required:true,
     },

@@ -16,9 +16,9 @@ const loginController = async (req, res) => {
         }
         bcrypt.compare(password, user.password, (err, result) => {
             if (result) {
-                const token = jwt.sign({ email:user.email , userId : user._id }, process.env.JWT_SECRET)
+                const token = jwt.sign({ email: user.email, userId: user._id }, process.env.JWT_SECRET)
                 return res
-                    .cokkie("token", token)
+                    .cokkie("token", token, { httpOnly: true })
                     .status(200)
                     .json({
                         message: "Login successfully"
@@ -26,18 +26,18 @@ const loginController = async (req, res) => {
             }
             else if (err) {
                 return res.status(500).json({
-                    message:"Internal Server Error"
+                    message: "Internal Server Error"
                 })
             }
-            else{
+            else {
                 return res.status(401).json({
-                    message:"Invalid credentials"
+                    message: "Invalid credentials"
                 })
             }
         })
     } catch (error) {
         res.status(500).json({
-            message:"Internal Server Error"
+            message: "Internal Server Error"
         })
     }
 }
