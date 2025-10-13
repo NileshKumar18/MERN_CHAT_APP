@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import { BrowserRouter , Route, Routes } from 'react-router-dom'
+import Signup from './pages/signup'
+import Login from './pages/Login'
+import ChatPage from './pages/ChatPage'
 
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -8,7 +12,15 @@ function App() {
 
   return (
     <>
-      <div className="text-2xl font-bold bg-red-50">Hello </div>
+      <BrowserRouter>
+      <Routes>
+        <Route path='/signup' element={<Signup/>}/>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/chat' element={<ChatPage/>}/>
+       
+      </Routes>
+      </BrowserRouter>
+
     </>
   )
 }
