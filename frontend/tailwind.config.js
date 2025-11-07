@@ -6,13 +6,12 @@ export default {
   ],
   theme: {
     extend: {
-        colors: {
-      dark: '#0A0A0F',
-      neonCyan: '#00FFF0',
-      neonPink: '#FF00E6',
-      neonGreen: '#8FFF00',
-      textLight: '#E0E0E0',
-    },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+      }
     },
   },
   plugins: [],

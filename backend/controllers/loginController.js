@@ -18,7 +18,7 @@ const loginController = async (req, res) => {
             if (result) {
                 const token = jwt.sign({ email: user.email, userId: user._id }, process.env.JWT_SECRET)
                 return res
-                    .cokkie("token", token, { httpOnly: true })
+                    .cookie("token", token, { httpOnly: true })
                     .status(200)
                     .json({
                         message: "Login successfully"
