@@ -8,19 +8,27 @@ export const createChat = async (req, res) => {
     try {
         const { userId } = req.user
         const loggedInUserId = userId
-        const { targetUserId } = req.body
+        const content = req.body
+        const targetUserId = content.content
+        
+      
+        
+        
 
 
         const targetUser = await userModel.findById(targetUserId)
-
+        // console.log(targetUser);
+        
 
         const chat = await chatModel.findOne({
             users: {
                 $all: [loggedInUserId, targetUserId]
             }
         })
-        if (chat) { 
-           return res.status(200).json({
+        // console.log(chat);
+        
+        if (chat) {
+            return res.status(200).json({
                 sucess: true,
                 message: "Chat already exists",
                 data: chat
@@ -32,6 +40,8 @@ export const createChat = async (req, res) => {
             chatName: targetUser.username,
             latestMessage: null,
         })
+        // console.log(createdChat);
+        
         res.status(200).json({
             sucess: true,
             message: "Chat created successfully",
@@ -47,28 +57,49 @@ export const createChat = async (req, res) => {
     }
 }
 
-export const getChat = async (req, res) => {
+export const getMessages = async (req, res) => {
     try {
         const { chatId } = req.params;
-        const chat = await chatModel.findById(chatId).populate("users", "-password").populate("latestMessage")
-        if (!chat) {
+        const messages = await messageModel.find({ chat: chatId }).populate("users", "-password").populate("latestMessage")
+        if (!messages) {
             return res.status(404).json({
-                message: "Chat not found"
+                message: "Messages not found"
             })
         }
         res.status(200).json({
             success: true,
-            message: "Chat fetched successfully",
-            data: chat
+            message: "Messages fetched successfully",
+            data: messages
         })
 
 
-      
+
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Error in fetching chat",
+            message: "Error in fetching messages",
             error: error.message,
         })
     }
 }
+export const getAllChats = async (req, res) => {
+    try {
+        const { userId } = req.user;
+        const chats = await chatModel.find({ users: userId })
+            .populate("users", "-password")
+            .populate("latestMessage")
+            .sort({ updatedAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            message: "All chats fetched successfully",
+            data: chats,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error fetching chats",
+            error: error.message,
+        });
+    }
+};

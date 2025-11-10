@@ -29,6 +29,9 @@ app.use('/api/messages' , messageRoutes)
 app.get('/', (req, res) => {
     res.send("Hello World");
 })
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-})
+process.on('unhandledRejection', (err) => console.log('Unhandled:', err.message));
+process.on('uncaughtException', (err) => console.log('Uncaught:', err.message));
+
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`✅ Server is running on http://localhost:${PORT}`);
+});
