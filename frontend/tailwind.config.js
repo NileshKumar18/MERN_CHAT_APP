@@ -6,12 +6,19 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        "gradient-main": "linear-gradient(135deg, #7C3AED, #A78BFA)", // main purple gradient
+        "gradient-bg": "linear-gradient(135deg, #2A273F, #1E1E2E)",   // dark background gradient
+      },
+      colors: {
+        primary: "#7C3AED",
+        secondary: "#A78BFA",
+        background: "#1E1E2E",
+      },
       fontFamily: {
-        poppins: ['Poppins', 'sans-serif'],
-        nunito: ['Nunito', 'sans-serif'],
         roboto: ['Roboto', 'sans-serif'],
-        inter: ['Inter', 'sans-serif'],
-      }
+        poppins: ['Poppins', 'sans-serif'],
+      },
     },
   },
   plugins: [],

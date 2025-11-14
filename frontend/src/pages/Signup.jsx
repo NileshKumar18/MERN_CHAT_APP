@@ -40,37 +40,36 @@ const signup = () => {
     }
 
     return (
-        <div className="h-screen relative flex justify-between items-center  bg-[url('/login-page-image.jpg')] bg-cover bg-center">
-            <div className='text-purple-500 select-none text-4xl font-semibold shadow-2xl shadow-purple-900  absolute top-1.5 px-[25px] w-full border-b-2 py-2 italic border-purple-900 '> &lt;/Chatify&gt;</div>
-            <div className='bg-transparent backdrop-blur-sm shadow-2xl shadow-purple-900 border-2 p-5 border-purple-700  absolute w-[600px] h-[500px] rounded-2xl ml-[100px]  ' >
-                <h1 className='text-white text-center text-4xl select-none font-semibold font-roboto '>Create your account</h1>
-                <p className='text-center text-[#fff]/40 select-none mb-[30px]'>Already have an account? <a href="/login" className='text-purple-600 underline hover:text-purple-700'>Login</a></p>
+        
 
-
-                <form onSubmit={handleSubmit}>
-
-                    <label htmlFor="name" className='text-[#fff] select-none ml-4 mb-2.5'>Username</label>
-                    <input type="text" name="username" id="" placeholder='Enter the Username...' value={formData.username} onChange={handleChange} autoComplete='off' className='border  mb-3.5 text-[#fff] focus:outline-none border-purple-700 rounded-full h-10 px-4 w-full' />
-
-
-                    <label htmlFor="email" className='text-[#fff] select-none ml-4 mb-2.5'>Email</label>
-                    <input type="email" name="email" id="" placeholder='Enter the Email...' value={formData.email} onChange={handleChange} className='border  mb-3.5 text-[#fff] focus:outline-none border-purple-700 rounded-full h-10 px-4 w-full' autoComplete='off' />
-
-                    <label htmlFor="password" className='text-[#fff] select-none ml-4 mb-2.5'>Password</label>
-                    <div className='relative'>
-                        <input type={showPassword ? "text" : "password"} name="password" id="" placeholder='Enter the Password...' value={formData.password} onChange={handleChange} className='border  mb-3.5 text-[#fff] select-none focus:outline-none border-purple-700 rounded-full h-10 px-4 w-full' autoComplete='off' />
-                        <span className='absolute right-4 top-[40%] transform -translate-y-1/2' onClick={() => setShowPassword(!showPassword)} >
-                            {showPassword ? <FaEye className=' text-xl text-white cursor-pointer' /> : <FaEyeSlash className=' text-xl text-white cursor-pointer' />}
-                        </span>
-                    </div>
-
-                    <button type="submit">
-                        <div className='bg-purple-700 select-none hover:bg-purple-800 w-[300px] ml-[125px] text-xl text-center rounded-full p-2 mt-5 text-white font-semibold cursor-pointer '>Create Account</div>
-                    </button>
-                </form>
-
-            </div>
-        </div>
+       <div className=" h-screen relative flex justify-center items-center  bg-[url('/Login.png')]  bg-center">
+                   <div className='text-[#5FA1A7] text-center select-none  text-4xl underline  underline-offset-4 font-semibold  absolute top-1.5 px-[25px] w-full  py-2 italic  '> &lt;/Chatify&gt;</div>
+                   <div className='t bg-[#F5EFE1]/50 backdrop-blur-lg shadow-2xl shadow-[#EC8F7D]   p-5   absolute w-[600px] h-[500px] rounded-2xl  ' >
+                       <h1 className='text-[#34495E] text-center text-4xl select-none  font-semibold font-roboto '>Create Account</h1>
+                       <p className='text-center text-[#34495E] mb-[30px] select-none'>Already Have an account? <a href="/login" className='create-account text-[#34495E] '>Login</a></p>
+       
+                       <form onSubmit={handleSubmit}>
+       
+                           <label htmlFor="username" className=' select-none text-[#34495E] ml-4 mb-2.5'>Username</label>
+                           <input type="text" name="username" id="" placeholder='Enter the Username...' value={formData.username} onChange={handleChange} className=' shadow-2xl shadow-[#EC8F7D] select-none  mb-3.5 text-[#34495E] focus:outline-none bg-[#F5EFE1] border-[#5FA1A7] border-2 rounded-full h-10 px-4 w-full' autoComplete='off' />
+                           <label htmlFor="email" className=' select-none text-[#34495E] ml-4 mb-2.5'>Email</label>
+                           <input type="email" name="email" id="" placeholder='Enter the Email...' value={formData.email} onChange={handleChange} className=' shadow-2xl shadow-[#EC8F7D] select-none  mb-3.5 text-[#34495E] focus:outline-none bg-[#F5EFE1] border-[#5FA1A7] border-2 rounded-full h-10 px-4 w-full' autoComplete='off' />
+       
+                           <label htmlFor="password" className='text-[#34495E] select-none ml-4 mb-2.5'>Password</label>
+                           <div className='relative'>
+                               <input type={showPassword ? "text" : "password"} name="password" id="" placeholder='Enter the Password...' value={formData.password} onChange={handleChange} className='border-2 bg-[#F5EFE1] shadow-2xl shadow-[#EC8F7D]  mb-3.5 text-[#34495E] select-none focus:outline-none border-[#5FA1A7] rounded-full h-10 px-4 w-full' autoComplete='off' />
+       
+                               <span className='absolute right-4 top-[40%] transform -translate-y-1/2' onClick={() => setShowPassword(!showPassword)} >
+                                   {showPassword ? <FaEye className='select-none text-xl text-[#34495E] cursor-pointer' /> : <FaEyeSlash className='select-none text-xl text-[#34495E] cursor-pointer' />}
+                               </span>
+       
+                           </div>
+                           <button type="submit">
+                               <div className=' login-btn bg-[#EC8F7D] select-none hover:bg-[#5FA1A7] w-[300px] ml-[125px] text-xl text-center rounded-full p-2 mt-5 text-[#34495E] font-semibold cursor-pointer '>Create Account</div>
+                           </button>
+                       </form>
+                   </div>
+               </div>
     )
 }
 

@@ -1,0 +1,39 @@
+.body{
+    font-family: 'Roboto', sans-serif;
+   background-color: #F4F6F8;
+}
+.create-account {
+  color: #34495E;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.create-account::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 50%; /* Start position is the center */
+  transform: translateX(-50%); /* Center the line */
+  background-color: #5FA1A7;
+  transition: all 0.3s ease; /* Transition for both width and position */
+}
+
+.create-account:hover {
+  color: #5FA1A7;
+}
+
+.create-account:hover::after {
+  width: 100%; /* Grow the underline */
+}
+.login-btn {
+   
+  
+  transition: background-color 0.3s ease-in-out;
+}
+.login-btn:hover {
+  background-color: #5FA1A7;
+  
+}

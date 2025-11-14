@@ -10,15 +10,15 @@ export const createChat = async (req, res) => {
         const loggedInUserId = userId
         const content = req.body
         const targetUserId = content.content
-        
-      
-        
-        
+
+
+
+
 
 
         const targetUser = await userModel.findById(targetUserId)
         // console.log(targetUser);
-        
+
 
         const chat = await chatModel.findOne({
             users: {
@@ -26,7 +26,7 @@ export const createChat = async (req, res) => {
             }
         })
         // console.log(chat);
-        
+
         if (chat) {
             return res.status(200).json({
                 sucess: true,
@@ -41,7 +41,7 @@ export const createChat = async (req, res) => {
             latestMessage: null,
         })
         // console.log(createdChat);
-        
+
         res.status(200).json({
             sucess: true,
             message: "Chat created successfully",
@@ -89,6 +89,8 @@ export const getAllChats = async (req, res) => {
             .populate("users", "-password")
             .populate("latestMessage")
             .sort({ updatedAt: -1 });
+            // console.log(chats);
+            
 
         res.status(200).json({
             success: true,

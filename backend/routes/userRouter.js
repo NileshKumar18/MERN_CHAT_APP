@@ -27,6 +27,8 @@ router.get("/", isLoggedIn, async (req, res) => {
     try {
         const loggedUserId = req.user.userId;
         const users = await userModel.find({ _id: { $ne: loggedUserId } }).select("-password");
+        // console.log(users);
+        
         res.status(200).json({
             success: true,
             data: users,
