@@ -203,10 +203,10 @@ const ChatPage = () => {
 
     return (
         <>
-            <div className="flex h-screen">
+            <div className="flex h-screen relative ">
 
 
-                <div className="border-r-2 bg-[#F5EFE1] w-[300px] min-h-screen border-[#5FA1A7]/50">
+                <div className="border-r-2  absolute bg-[url('/Login.png')] bg-center w-[300px] min-h-screen border-[#5FA1A7]/50">
 
 
                     <div className="p-4 bg-[#EC8F7D]/20 backdrop-blur-sm border-b-2 border-[#5FA1A7]/30
@@ -239,10 +239,10 @@ const ChatPage = () => {
                 </div>
 
 
-                <div className="flex-1 flex flex-col bg-[#F5EFE1]">
+                <div className="flex-1 flex flex-col absolute left-[275px] bg-[url('/Login.png')] inset-0  bg-center">
 
-                    {/* Chat Header */}
-                    <div className="bg-[#ADD7DD] border-b-2 border-[#5FA1A7]/30 text-[#34495E] h-[80px] flex items-center justify-between px-4">
+                     
+                    <div className="bg-[#ADD7DD] border-b-2 border-[#5FA1A7]/30 text-[#34495E] h-20 flex items-center justify-between px-4">
                         <div className='flex items-center'>
                             <input className='w-[50px] h-[50px] rounded-full' type="image" src="https://img.freepik.com/free-photo/portrait-beautiful-purebred-pussycat-with-shorthair-orange-collar-neck-sitting-floor-reacting-camera-flash-scared-looking-light-indoor_8353-12551.jpg?semt=ais_hybrid&w=740&q=80" alt="" />
 
@@ -275,7 +275,7 @@ const ChatPage = () => {
 
 
 
-                    <div className="flex-1 overflow-y-auto flex-wrap p-4">
+                    <div className="flex-1 overflow-y-auto backdrop-blur-[1px] flex-wrap p-4">
                         {messages.map((msg) => {
                             const messageTime = new Date(msg.createdAt).toLocaleTimeString([], {
                                 hour: '2-digit',
@@ -304,7 +304,7 @@ const ChatPage = () => {
 
                     <div className="bg-[#ADD7DD]/50 border-t-2 border-[#5FA1A7]/30 h-[50px] flex items-center p-8">
                         <input
-                            // REVISED UI: Added focus ring for better accessibility and replaced dark input background
+                            
                             className="border border-[#5FA1A7] bg-white text-[#34495E] rounded-full h-10 px-4 w-full focus:ring-2 focus:ring-[#EC8F7D] focus:border-[#EC8F7D] focus:outline-none"
                             type="text"
                             placeholder="Type a message..."
