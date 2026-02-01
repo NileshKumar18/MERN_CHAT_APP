@@ -42,7 +42,7 @@ router.get("/getAll", isLoggedIn, async (req, res) => {
     try {
         const users = await userModel.find().select("-password")
         console.log(users);
-        
+
         return res.status(200).json({
             users: users,
             success: true
@@ -54,7 +54,12 @@ router.get("/getAll", isLoggedIn, async (req, res) => {
         })
     }
 })
-
+router.get('/me', isLoggedIn, async (req, res) => {
+    res.status(200).json({
+        message: "User data fetched successfully",
+        data: req.user
+    })
+})
 
 
 

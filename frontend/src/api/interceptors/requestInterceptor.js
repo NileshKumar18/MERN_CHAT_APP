@@ -6,9 +6,9 @@ const requestInterceptor = (config) => {
 
     // console.log("request Interceptor get hit");
 
-    if (config.url.includes('/api/auth/refresh')) {
-        return config
-    }
+    // if (config.url.includes('/api/auth/refresh')) {
+    //     return config
+    // }
 
     const accessToken = getAccessToken()
 

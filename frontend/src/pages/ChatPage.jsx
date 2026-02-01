@@ -9,8 +9,9 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import io from 'socket.io-client';
 import { useRef } from 'react';
-import chat from '../../../backend/models/chatModel.js';
+
 import api from '../api/axios.js';
+import { setAccessToken } from '../components/tokenService.js';
 
 
 
@@ -32,6 +33,21 @@ const ChatPage = () => {
         setMessage(e.target.value);
 
     }
+
+    useEffect(() => {
+        const restoreSession = async () => {
+            try {
+                const res = await api.get("/api/auth/refresh")
+                setAccessToken(res.data.accessToken)
+                console.log("from the refresh ", res.data);
+
+            } catch (error) {
+                console.error("error in hitting the refersh route", error.response?.message)
+                navigate('/login')
+            }
+        }
+        restoreSession()
+    }, [])
 
     const handleSend = async () => {
         if (!message.trim()) return;
@@ -188,7 +204,7 @@ const ChatPage = () => {
 
             try {
                 const res = await api.get(`/api/messages/${chatId}`);
-                console.log("from fetchMessages");
+                // console.log("from fetchMessages" , res.data);
 
 
                 setMessages(res.data.data);
@@ -206,7 +222,7 @@ const ChatPage = () => {
             try {
                 const res = await api.get("/api/users/getAll")
                 // console.log( "from fetchUsers" ,res.data.users);
-                
+
                 setUsers(res.data.users)
             } catch (error) {
                 console.error("Error in fetching users", error.response?.data?.message);
@@ -216,7 +232,19 @@ const ChatPage = () => {
         fecthUsers()
     }, [])
 
-   
+    useEffect(() => {
+        const restoreUser = async () => {
+            try {
+                const res = await api.get("/api/users/me")
+                console.log("from restore user", res.data);
+                // setUserId(res.data.data._id);
+            } catch (error) {
+                console.error("❌ Restore user failed:", error.response?.data?.message);
+            }
+        }
+        restoreUser();
+    }, [])
+
 
 
 
@@ -237,14 +265,18 @@ const ChatPage = () => {
 
 
                     <div>
-                        <h1>hello</h1>
-                        {users.map((user) => (
-                            <div key={user._id}>
-                                <p>{user.username}</p>
-                            </div>
-                        ))}
-                  
-                        {chats.map((chat) => {
+
+                        {users.filter((user) => user._id !== userId)
+                            .map((user) => (
+                                <div key={user._id}
+                                    onClick={() => handleSelectChat(user.username, user._id)}
+                                    className={`px-2 py-2 border-b-2 border-[#5FA1A7]/30 cursor-pointer flex flex-col text-left transition duration-150 ease-in-out hover:bg-[#5FA1A7]/40
+                            ${targetId === user._id ? "bg-[#ADD7DD]" : ""}`}>
+                                    <p className='text-xl text-[#34495E]'>{user.username}</p>
+                                </div>
+                            ))}
+
+                        {/* {chats.map((chat) => {
                             const receiverId = chat.users.find((id) => id._id !== userId);
                             console.log(receiverId);
 
@@ -263,7 +295,7 @@ const ChatPage = () => {
                                     <p className='text-sm text-[#5FA1A7] truncate'>{chat.latestMessage?.content || "No messages yet"}</p>
                                 </div>
                             )
-                        })}
+                        })} */}
 
                     </div>
 
