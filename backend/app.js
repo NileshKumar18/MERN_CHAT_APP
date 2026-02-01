@@ -4,6 +4,7 @@ import connection from "./config/dbConfig.js";
 import userRouter from "./routes/userRouter.js"
 import chatRoutes from "./routes/chatRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
+import authRoutes from "./routes/authRoutes.js"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { createServer } from "http";
@@ -60,6 +61,7 @@ app.use(cookieParser());
 app.use('/api/users', userRouter)
 app.use('/api/chat', chatRoutes)
 app.use('/api/messages', messageRoutes)
+app.use('/api/auth/', authRoutes)
 
 app.get('/', (req, res) => {
     res.send("Hello World");

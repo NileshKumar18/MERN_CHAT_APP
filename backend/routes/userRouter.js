@@ -4,6 +4,7 @@ import loginController from '../controllers/loginController.js';
 import profileController from '../controllers/profileController.js';
 import isLoggedIn from '../middleware/isLoggedIn.js';
 import userModel from '../models/userModel.js';
+import message from '../models/messageModel.js';
 
 
 const router = express.Router();
@@ -18,7 +19,7 @@ router.get('/checkAuth', isLoggedIn, (req, res) => {
         message: "User is authenticated",
         data: {
             userId: req.user.userId,
-            name: req.user.name,
+
             email: req.user.email
         }
     })
@@ -28,7 +29,7 @@ router.get("/", isLoggedIn, async (req, res) => {
         const loggedUserId = req.user.userId;
         const users = await userModel.find({ _id: { $ne: loggedUserId } }).select("-password");
         // console.log(users);
-        
+
         res.status(200).json({
             success: true,
             data: users,
@@ -37,6 +38,22 @@ router.get("/", isLoggedIn, async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+router.get("/getAll", isLoggedIn, async (req, res) => {
+    try {
+        const users = await userModel.find().select("-password")
+        console.log(users);
+        
+        return res.status(200).json({
+            users: users,
+            success: true
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+})
 
 
 

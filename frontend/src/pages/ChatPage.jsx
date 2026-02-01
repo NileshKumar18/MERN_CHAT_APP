@@ -9,7 +9,8 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import io from 'socket.io-client';
 import { useRef } from 'react';
-import chat from '../../../backend/models/chatModel';
+import chat from '../../../backend/models/chatModel.js';
+import api from '../api/axios.js';
 
 
 
@@ -40,8 +41,8 @@ const ChatPage = () => {
 
         try {
 
-            const res = await axios.post(
-                `http://localhost:3000/api/messages/${chatId}`,
+            const res = await api.post(
+                `/api/messages/${chatId}`,
                 { content: msgToSend },
                 { withCredentials: true }
             );
@@ -122,7 +123,9 @@ const ChatPage = () => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const res = await axios.get("http://localhost:3000/api/users/checkAuth", { withCredentials: true })
+                const res = await api.get("/api/users/checkAuth")
+                console.log(res.data);
+
 
                 setUserId(res.data.data.userId);
 
@@ -140,7 +143,8 @@ const ChatPage = () => {
     useEffect(() => {
         const fetchChats = async () => {
             try {
-                const res = await axios.get("http://localhost:3000/api/chat", { withCredentials: true });
+                const res = await api.get("/api/chat");
+                console.log("from the fetch Chats", res.data);
 
 
                 setChats(res.data.data);
@@ -159,7 +163,8 @@ const ChatPage = () => {
 
 
         try {
-            const res = await axios.post("http://localhost:3000/api/chat/createChat", { content: targetId }, { withCredentials: true });
+            const res = await api.post("/api/chat/createChat", { content: targetId });
+            console.log("from select chat", res.data);
 
             setChatId(res.data.data._id);
 
@@ -182,7 +187,9 @@ const ChatPage = () => {
             if (!selectedChat) return;
 
             try {
-                const res = await axios.get(`http://localhost:3000/api/messages/${chatId}`, { withCredentials: true });
+                const res = await api.get(`/api/messages/${chatId}`);
+                console.log("from fetchMessages");
+
 
                 setMessages(res.data.data);
             } catch (error) {
@@ -194,8 +201,22 @@ const ChatPage = () => {
     }, [chatId]);
 
 
+    useEffect(() => {
+        const fecthUsers = async () => {
+            try {
+                const res = await api.get("/api/users/getAll")
+                // console.log( "from fetchUsers" ,res.data.users);
+                
+                setUsers(res.data.users)
+            } catch (error) {
+                console.error("Error in fetching users", error.response?.data?.message);
 
+            }
+        }
+        fecthUsers()
+    }, [])
 
+   
 
 
 
@@ -216,8 +237,17 @@ const ChatPage = () => {
 
 
                     <div>
+                        <h1>hello</h1>
+                        {users.map((user) => (
+                            <div key={user._id}>
+                                <p>{user.username}</p>
+                            </div>
+                        ))}
+                  
                         {chats.map((chat) => {
                             const receiverId = chat.users.find((id) => id._id !== userId);
+                            console.log(receiverId);
+
 
 
                             return (
@@ -228,6 +258,7 @@ const ChatPage = () => {
                                     className={`px-2 py-2 border-b-2 border-[#5FA1A7]/30 cursor-pointer flex flex-col text-left transition duration-150 ease-in-out hover:bg-[#5FA1A7]/40
                             ${selectedChat === chat.chatName ? "bg-[#ADD7DD]" : ""}`}
                                 >
+
                                     <h4 className='text-xl text-[#34495E]'>{chat.chatName || "Chat"}</h4>
                                     <p className='text-sm text-[#5FA1A7] truncate'>{chat.latestMessage?.content || "No messages yet"}</p>
                                 </div>
@@ -241,7 +272,7 @@ const ChatPage = () => {
 
                 <div className="flex-1 flex flex-col absolute left-[275px] bg-[url('/Login.png')] inset-0  bg-center">
 
-                     
+
                     <div className="bg-[#ADD7DD] border-b-2 border-[#5FA1A7]/30 text-[#34495E] h-20 flex items-center justify-between px-4">
                         <div className='flex items-center'>
                             <input className='w-[50px] h-[50px] rounded-full' type="image" src="https://img.freepik.com/free-photo/portrait-beautiful-purebred-pussycat-with-shorthair-orange-collar-neck-sitting-floor-reacting-camera-flash-scared-looking-light-indoor_8353-12551.jpg?semt=ais_hybrid&w=740&q=80" alt="" />
@@ -304,7 +335,7 @@ const ChatPage = () => {
 
                     <div className="bg-[#ADD7DD]/50 border-t-2 border-[#5FA1A7]/30 h-[50px] flex items-center p-8">
                         <input
-                            
+
                             className="border border-[#5FA1A7] bg-white text-[#34495E] rounded-full h-10 px-4 w-full focus:ring-2 focus:ring-[#EC8F7D] focus:border-[#EC8F7D] focus:outline-none"
                             type="text"
                             placeholder="Type a message..."

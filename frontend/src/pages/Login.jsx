@@ -6,40 +6,45 @@ import './Login.css'
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import api from '../api/axios.js';
+import { setAccessToken } from '@components/tokenService.js';
 
 
 const Login = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
-       
+
         email: "",
         password: ""
     })
     const handleChange = (e) => {
-        const {name , value} = e.target
+        const { name, value } = e.target
         setFormData({
-            ...formData , 
-            [name] : value
+            ...formData,
+            [name]: value
         })
     }
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:3000/api/users/login" , formData , {withCredentials:true})
-        
-        setFormData({
+            const res = await api.post("/api/users/login", formData)
+            // console.log("from login page" , res.data);
             
-            email:"",
-            password:""
-        })
-        setShowPassword(false);
-        navigate("/chat");
-            console.log(res.data);
+            setAccessToken(res.data.accessToken)
+
+            setFormData({
+
+                email: "",
+                password: ""
+            })
+            setShowPassword(false);
+            navigate("/chat");
+            // console.log(res.data);
         } catch (error) {
             console.error("❌ Login failed:", error.response?.data?.message);
-            if (error.response?.status === 404 ) {
+            if (error.response?.status === 404) {
                 navigate("/signup");
             }
         }
