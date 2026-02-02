@@ -43,7 +43,7 @@ const ChatPage = () => {
 
             } catch (error) {
                 console.error("error in hitting the refersh route", error.response?.message)
-                navigate('/login')
+                
             }
         }
         restoreSession()

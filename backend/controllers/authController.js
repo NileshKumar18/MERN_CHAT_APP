@@ -6,8 +6,10 @@ import { generateAcessToken, generateRefreshToken } from "../auth/Jwt.Contoller.
 
 export const refreshAccessToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken
+    // console.log(refreshToken);
+
     if (!refreshToken) {
-        res.status(401)
+        return res.status(401)
             .json({
                 message: "No refresh token",
                 success: false
@@ -17,14 +19,14 @@ export const refreshAccessToken = async (req, res) => {
 
     const user = await userModel.findById(decoded.userId)
     if (!user) {
-        res.status(401)
+        return res.status(401)
             .json({
                 message: "User Not Found",
                 success: false
             })
     }
     if (user.refreshToken != refreshToken) {
-        res.status(401)
+        return res.status(401)
             .json({
                 message: "Invalid Refresh Token",
                 success: false
@@ -34,8 +36,8 @@ export const refreshAccessToken = async (req, res) => {
     const newRefreshToken = generateRefreshToken(user)
     user.refreshToken = newRefreshToken
     await user.save()
-    res.cookie("refreshToken", newRefreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 7 * 24 * 60 * 60 * 1000 })
-    res.status(200)
+    return res.cookie("refreshToken", newRefreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 7 * 24 * 60 * 60 * 1000 })
+        .status(200)
         .json({
             accessToken: accessToken,
 
