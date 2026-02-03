@@ -1,34 +1,42 @@
-import express from 'express'
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
+import userModel from "../models/userModel.js";
 
-const isLoggedIn = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     try {
-        // console.log("access Token" , req.headers);
+        const authHeader = req.headers.authorization;
 
-        const token = req.headers.authorization.split(" ")[1];
-        // console.log(token);
-        
-
-
-        if (!token) {
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
-                message: "Access denied ! No token provided"
-            })
+                success: false,
+                message: "No access token",
+            });
         }
-        const decoded = jwt.verify(token, process.env.Access_Token_Secret)
-        // console.log(decoded);
+
+        const token = authHeader.split(" ")[1];
+        // console.log("token from isLogged In" , token);
         
-        req.user = decoded;
-        next()
 
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+        const user = await userModel.findById(decoded.userId).select("-password");
+        // console.log("isLoggedIN" , user);
+        
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        req.user = user; // attach user to request
+        next();
     } catch (error) {
-        res.status(403).json({
-            message: "Invalid or expire token"
-        })
+        return res.status(401).json({
+            success: false,
+            message: "Invalid or expired access token",
+        });
     }
+};
 
-
-
-}
-
-export default isLoggedIn
+export default authMiddleware;

@@ -5,15 +5,16 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
 import { setAccessToken } from '../utils/tokenServices.js'
-import { loginUser } from '../services/authServices.js';
+import { signupUser } from '../services/authServices.js';
 
 // background: #25e8e5;
 // background: linear-gradient(90deg, rgba(37, 232, 229, 1) 9%, rgba(181, 34, 164, 0.96) 65%);
 
-const Login = () => {
+const SignUp = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+    username: "",
     email: "",
     password: ""
   })
@@ -27,18 +28,26 @@ const Login = () => {
     }))
   }
   const handleSubmit = async (e) => {
+
+    console.log("clicked");
+    console.log(formData);
+    
+    
     e.preventDefault();
     try {
-      const res = await loginUser(formData);
+      const res = await signupUser(formData);
+      console.log("from signup pAge " , res.data);
+      
       setAccessToken(res.data.accessToken);
       setFormData({
+        username: "",
         email: "",
         password: ""
       });
       setShowPassword(false);
-      navigate("/chat" , {replace:true});
+      navigate("/chat");
     } catch (error) {
-      console.error("❌ Login failed:", error.response?.data?.message);
+      console.error("❌ Signup failed:", error.response?.data?.message);
       if (error.response?.status === 404) {
         navigate("/signup");
       }
@@ -68,22 +77,42 @@ const Login = () => {
                 p-6 rounded-2xl">
 
             <h1 className="text-[#34495E] text-center text-4xl font-semibold font-roboto">
-              Login to your account
+             Create your account
             </h1>
 
             <p className="text-center text-[#34495E] mb-8">
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <a
-                href="/signup"
+                href="/login"
                 className="font-semibold text-purple-700 hover:text-cyan-700 transition"
               >
-                Create Account
+                Login Here
               </a>
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
 
+              <div>
+                <label htmlFor="username" className="block text-[#34495E] ml-4 mb-1">
+                  Username
+                </label>
+                <input
+                  id="username"
+                  type="text"
+                  name="username"
+                  placeholder="Enter the Username..."
+                  value={formData.username}
+                  onChange={handleChange}
+                  autoComplete="off"
+                  className="w-full h-10 px-4 rounded-full
+                   bg-white/70 text-[#34495E]
+                   border-2 border-cyan-400
+                   focus:outline-none focus:border-purple-500
+                   shadow-lg"
+                />
+              </div>
               {/* Email */}
+
               <div>
                 <label htmlFor="email" className="block text-[#34495E] ml-4 mb-1">
                   Email
@@ -147,7 +176,7 @@ const Login = () => {
                  text-white shadow-xl
                  hover:scale-105 transition-transform"
               >
-                Login
+                Sign Up
               </button>
 
             </form>
@@ -160,4 +189,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default SignUp

@@ -7,26 +7,31 @@ export const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
     const [authLoading, setAuthLoading] = useState(true);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const restoreSession = async () => {
+        const loadUser = async () => {
             try {
                 const res = await api.get('/api/auth/refresh')
                 setAccessToken(res.data.accessToken)
-                setIsAuthenticated(true)
+                const resUser = await api.get('/api/users/me')
+
+                setUser(resUser.data.data)
             } catch (error) {
-                clearAccessToken()
-                setIsAuthenticated(false)
+                console.log("Auth failed");
+                
+                setUser(null)
             } finally {
                 setAuthLoading(false)
             }
         }
-        restoreSession()
+        loadUser()
     }, [])
 
     return (
-        <AuthContext.Provider value={{ authLoading, isAuthenticated }}>
+        <AuthContext.Provider value={{ authLoading,
+         user,
+          isAuthenticated: !!user,}}>
             {children}
         </AuthContext.Provider>
     )

@@ -40,8 +40,9 @@ router.get("/", isLoggedIn, async (req, res) => {
 });
 router.get("/getAll", isLoggedIn, async (req, res) => {
     try {
-        const users = await userModel.find().select("-password")
-        console.log(users);
+        const users = await userModel.find({ _id: { $ne: req.user._id } }).select("-password ")
+        // console.log( "from getAll users" ,req.user._id);
+
 
         return res.status(200).json({
             users: users,

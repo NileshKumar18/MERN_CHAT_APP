@@ -6,10 +6,12 @@ import chat from "../models/chatModel.js";
 
 export const createChat = async (req, res) => {
     try {
-        const { userId } = req.user
-        const loggedInUserId = userId
+        // const { userId } = req.user
+        const loggedInUserId = req.user._id
         const content = req.body
         const targetUserId = content.content
+        console.log("loggedInUserId" , loggedInUserId);
+        
 
 
 
@@ -17,7 +19,7 @@ export const createChat = async (req, res) => {
 
 
         const targetUser = await userModel.findById(targetUserId)
-        console.log(targetUser);
+        console.log("Target User" ,targetUser);
 
 
         const chat = await chatModel.findOne({
@@ -25,7 +27,7 @@ export const createChat = async (req, res) => {
                 $all: [loggedInUserId, targetUserId]
             }
         })
-        console.log(chat);
+        console.log("Existing Chat:", chat);
 
         if (chat) {
             return res.status(200).json({
@@ -40,7 +42,7 @@ export const createChat = async (req, res) => {
             chatName: targetUser.username,
             latestMessage: null,
         })
-        console.log(createdChat);
+        console.log("Created Chat:", createdChat);
 
         res.status(200).json({
             sucess: true,
@@ -49,10 +51,10 @@ export const createChat = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(500).json({
+       return res.status(500).json({
             sucess: false,
-            message: "Error in fetching/creating chat",
-            error: error.message
+            message: error.message ,
+            
         })
     }
 }

@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     },
     refreshToken: {
         type: String,
-        required: true
+        default:null
     },
     createdAt: Date,
     isOnline: Boolean,
