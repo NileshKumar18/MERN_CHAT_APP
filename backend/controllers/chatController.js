@@ -10,7 +10,7 @@ export const createChat = async (req, res) => {
         const loggedInUserId = req.user._id
         const content = req.body
         const targetUserId = content.content
-        console.log("loggedInUserId" , loggedInUserId);
+        // console.log("loggedInUserId" , loggedInUserId);
         
 
 
@@ -19,7 +19,7 @@ export const createChat = async (req, res) => {
 
 
         const targetUser = await userModel.findById(targetUserId)
-        console.log("Target User" ,targetUser);
+        // console.log("Target User" ,targetUser);
 
 
         const chat = await chatModel.findOne({
@@ -27,7 +27,7 @@ export const createChat = async (req, res) => {
                 $all: [loggedInUserId, targetUserId]
             }
         })
-        console.log("Existing Chat:", chat);
+        // console.log("Existing Chat:", chat);
 
         if (chat) {
             return res.status(200).json({
@@ -42,7 +42,7 @@ export const createChat = async (req, res) => {
             chatName: targetUser.username,
             latestMessage: null,
         })
-        console.log("Created Chat:", createdChat);
+        // console.log("Created Chat:", createdChat);
 
         res.status(200).json({
             sucess: true,
@@ -79,8 +79,8 @@ export const getMessages = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Error in fetching messages",
-            error: error.message,
+            message: error.message,
+           
         })
     }
 }

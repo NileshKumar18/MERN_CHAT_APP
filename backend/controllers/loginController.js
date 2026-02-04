@@ -24,7 +24,8 @@ const loginController = async (req, res) => {
                 user.refreshToken = refreshToken,
                     await user.save()
                 return res
-                    .cookie("refreshToken", refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 7 * 24 * 60 * 60 * 1000 })
+                    .cookie("refreshToken", refreshToken, { httpOnly: true, secure: false, sameSite: 'Lax',
+                        path: '/', maxAge: 7 * 24 * 60 * 60 * 1000 })
                     .json({
                         message: "Login successfully",
                         accessToken: accessToken

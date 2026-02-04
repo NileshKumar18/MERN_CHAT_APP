@@ -19,6 +19,7 @@ export const refreshAccessToken = async (req, res) => {
 
     const user = await userModel.findById(decoded.userId)
     if (!user) {
+        res.clearCookie("refreshToken", { httpOnly: true, secure: false, sameSite: 'Lax', path: '/' })
         return res.status(401)
             .json({
                 message: "User Not Found",
@@ -36,7 +37,7 @@ export const refreshAccessToken = async (req, res) => {
     const newRefreshToken = generateRefreshToken(user)
     user.refreshToken = newRefreshToken
     await user.save()
-    return res.cookie("refreshToken", newRefreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 7 * 24 * 60 * 60 * 1000 })
+    return res.cookie("refreshToken", newRefreshToken, { httpOnly: true, secure: false, sameSite: 'Lax', path: '/', maxAge: 7 * 24 * 60 * 60 * 1000 })
         .status(200)
         .json({
             accessToken: accessToken,

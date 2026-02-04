@@ -29,7 +29,7 @@ const signupController = async (req, res) => {
         createdUser.refreshToken = refreshToken,
             await createdUser.save()
         return res
-            .cookie("refreshToken", refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 7 * 24 * 60 * 60 * 1000 })
+            .cookie("refreshToken", refreshToken, { httpOnly: true, secure: false, sameSite: 'Lax', path: '/', maxAge: 7 * 24 * 60 * 60 * 1000 })
             .json({
                 message: "User created Successfully",
                 accessToken: accessToken
@@ -42,7 +42,7 @@ const signupController = async (req, res) => {
         //     })
 
 
-    } catch (error) { 
+    } catch (error) {
         res.status(500).json({
             message: "Internal Server Error"
         })

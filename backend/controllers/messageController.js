@@ -7,11 +7,11 @@ export const getMessages = async (req, res) => {
         const { chatId } = req.params
         // console.log(chatId);
         // console.log("...........................................................................");
-        
-        
+
+
         const messages = await messageModel.find({ chat: chatId }).populate("sender", "-password").populate("chat")
         // console.log(messages);
-        
+
         res.status(200).json({
             success: true,
             message: "Messages fetched successfully",
@@ -33,8 +33,8 @@ export const createMessages = async (req, res) => {
         // console.log("➡️ content:", req.body.content);
 
         const { content } = req.body;
-        const { chatId } = req.params;
-        const { userId } = req.user;  // <-- verify this exists!
+        const { chatId } = req.params; 
+        const userId = req.user._id;  // <-- verify this exists!
 
         if (!content || !chatId) {
             return res.status(400).json({
@@ -48,27 +48,27 @@ export const createMessages = async (req, res) => {
             chat: chatId,
         });
         // console.log(createdMessage);
-        
+
 
         const fullMessage = await messageModel
             .findById(createdMessage._id)
             .populate("sender", "-password")
             .populate("chat");
-            // console.log(fullMessage);
+        // console.log(fullMessage);
 
         await chatModel.findByIdAndUpdate(chatId, { latestMessage: fullMessage._id });
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Message created successfully",
             data: fullMessage,
         });
     } catch (error) {
         console.error("❌ Error in creating message:", error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
-            message: "Error in creating message",
-            error: error.message,
+            message: error.message,
+
         });
     }
 };

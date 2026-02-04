@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react'
 import api from '../api/axios.js'
 import { clearAccessToken, setAccessToken } from '../utils/tokenServices.js';
+import refreshApi from '../api/refreshApi.js';
 
 
 export const AuthContext = createContext()
@@ -12,26 +13,37 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const loadUser = async () => {
             try {
-                const res = await api.get('/api/auth/refresh')
-                setAccessToken(res.data.accessToken)
+                // 1️⃣ Try normal auth first
                 const resUser = await api.get('/api/users/me')
-
                 setUser(resUser.data.data)
-            } catch (error) {
-                console.log("Auth failed");
-                
-                setUser(null)
+            } catch (err) {
+                try {
+                    // 2️⃣ Only then try refresh
+                    const res = await refreshApi.get('/api/auth/refresh')
+                    setAccessToken(res.data.accessToken)
+
+                    // 3️⃣ Retry /me
+                    const resUser = await api.get('/api/users/me')
+                    setUser(resUser.data.data)
+                } catch (err) {
+                    // 4️⃣ Truly unauthenticated
+                    clearAccessToken()
+                    setUser(null)
+                }
             } finally {
                 setAuthLoading(false)
             }
         }
+
         loadUser()
     }, [])
 
     return (
-        <AuthContext.Provider value={{ authLoading,
-         user,
-          isAuthenticated: !!user,}}>
+        <AuthContext.Provider value={{
+            authLoading,
+            user,
+            isAuthenticated: !!user,
+        }}>
             {children}
         </AuthContext.Provider>
     )

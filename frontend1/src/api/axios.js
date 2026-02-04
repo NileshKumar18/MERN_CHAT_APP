@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { clearAccessToken, getAccessToken, setAccessToken } from '../utils/tokenServices.js';
+import refreshApi from './refreshApi.js';
 
 const api = axios.create({
     baseURL: 'http://localhost:3000',
@@ -22,15 +23,23 @@ api.interceptors.response.use(
     (res) => res,
     async (error) => {
         const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry) {
+        if (originalRequest.url.includes('/api/auth/refresh')) {
+            clearAccessToken();
+            window.location.replace('/login'); // replace, not href
+            return Promise.reject(error);
+        }
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                const res = await api.get('/api/auth/refresh')
+                const res = await refreshApi.get('/api/auth/refresh')
                 setAccessToken(res.data.accessToken)
+                originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`
                 return api(originalRequest);
             } catch (error) {
                 clearAccessToken()
-                window.location.href = '/login'
+                // window.location.href = '/login'
+                return Promise.reject(error);
             }
         }
         return Promise.reject(error);
