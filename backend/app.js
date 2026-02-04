@@ -72,4 +72,5 @@ process.on('uncaughtException', (err) => console.log('Uncaught:', err.message));
 server.listen(PORT, "0.0.0.0", () => {
     console.log(`✅ Server and Socket.IO running on http://localhost:${PORT}`);
 });
+export { io };
 

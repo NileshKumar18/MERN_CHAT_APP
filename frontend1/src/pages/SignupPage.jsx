@@ -7,6 +7,26 @@ import { FaEyeSlash } from "react-icons/fa";
 import { setAccessToken } from '../utils/tokenServices.js'
 import { signupUser } from '../services/authServices.js';
 
+{/* <div>
+                <label htmlFor="username" className="block text-[#34495E] ml-4 mb-1">
+                  Username
+                </label>
+                <input
+                  id="username"
+                  type="text"
+                  name="username"
+                  placeholder="Enter the Username..."
+                  value={formData.username}
+                  onChange={handleChange}
+                  autoComplete="off"
+                  className="w-full h-10 px-4 rounded-full
+                   bg-white/70 text-[#34495E]
+                   border-2 border-cyan-400
+                   focus:outline-none focus:border-purple-500
+                   shadow-lg"
+                />
+              </div> */}
+
 // background: #25e8e5;
 // background: linear-gradient(90deg, rgba(37, 232, 229, 1) 9%, rgba(181, 34, 164, 0.96) 65%);
 
@@ -31,13 +51,13 @@ const SignUp = () => {
 
     console.log("clicked");
     console.log(formData);
-    
-    
+
+
     e.preventDefault();
     try {
       const res = await signupUser(formData);
-      console.log("from signup pAge " , res.data);
-      
+      console.log("from signup pAge ", res.data);
+
       setAccessToken(res.data.accessToken);
       setFormData({
         username: "",
@@ -57,9 +77,12 @@ const SignUp = () => {
 
 
   return (
-    <div className="p-10 bg-linear-to-b from-cyan-200 via-violet-400 to-purple-500 h-screen flex justify-center items-center">
-      <div className='bg-white flex  rounded-2xl shadow-2xl/30   h-[90vh] w-[90vw]  '>
-        <div className="bg-linear-to-b p-0.5 from-cyan-200 via-violet-400 to-purple-500 border-r-2 border-cyan-300 rounded-l-2xl h-full w-1/3">
+    <div className="min-h-screen px-4 md:px-10 bg-linear-to-b from-cyan-200 via-violet-400 to-purple-500 flex justify-center item-center md:items-center">
+
+      <div className="bg-white flex flex-col md:flex-row rounded-2xl shadow-2xl/30 w-full max-w-6xl min-h-[90vh] md:min-h-[80vh] overflow-hidden">
+
+        <div className="hidden md:flex bg-linear-to-b p-0.5 from-cyan-200 via-violet-400 to-purple-500 border-r-2 border-cyan-300 w-1/3 flex-col">
+
           <div className=" h-40 w-full rounded-l-xl flex justify-center items-center flex-col mt-20 ">
             <img className='invert' width={80} src="image.png" alt="" />
             <p className='text-4xl font-semibold text-white'><span>&lt;</span> Chatify<span>/&gt;</span></p>
@@ -70,14 +93,13 @@ const SignUp = () => {
             <p className='text-white text-3xl  mt-6'>Enjoy...!</p>
           </div>
         </div>
-        <div className="flex rounded-r-xl justify-center w-2/3 items-center bg-red-50">
-          <div className=" w-150 max-w-[90%] h-125
-                
-                backdrop-blur-xl shadow-2xl shadow-purple-400/40 
-                p-6 rounded-2xl">
+        <div className="flex justify-center items-center min-h-full py-20 w-full md:w-2/3 bg-red-50 px-4">
+
+          <div className="w-full max-w-md backdrop-blur-xl  shadow-2xl shadow-purple-400/40 p-6 rounded-2xl">
+
 
             <h1 className="text-[#34495E] text-center text-4xl font-semibold font-roboto">
-             Create your account
+              Create your account
             </h1>
 
             <p className="text-center text-[#34495E] mb-8">
@@ -111,8 +133,8 @@ const SignUp = () => {
                    shadow-lg"
                 />
               </div>
-              {/* Email */}
 
+              {/* Email */}
               <div>
                 <label htmlFor="email" className="block text-[#34495E] ml-4 mb-1">
                   Email
@@ -126,10 +148,10 @@ const SignUp = () => {
                   onChange={handleChange}
                   autoComplete="off"
                   className="w-full h-10 px-4 rounded-full
-                   bg-white/70 text-[#34495E]
-                   border-2 border-cyan-400
-                   focus:outline-none focus:border-purple-500
-                   shadow-lg"
+                       bg-white/70 text-[#34495E]
+                       border-2 border-cyan-400
+                       focus:outline-none focus:border-purple-500
+                       shadow-lg"
                 />
               </div>
 
@@ -149,10 +171,10 @@ const SignUp = () => {
                     onChange={handleChange}
                     autoComplete="off"
                     className="w-full h-10 px-4 rounded-full
-                     bg-white/70 text-[#34495E]
-                     border-2 border-cyan-400
-                     focus:outline-none focus:border-purple-500
-                     shadow-lg"
+                         bg-white/70 text-[#34495E]
+                         border-2 border-cyan-400
+                         focus:outline-none focus:border-purple-500
+                         shadow-lg"
                   />
 
                   <span
@@ -171,10 +193,10 @@ const SignUp = () => {
               {/* Button */}
               <button
                 type="submit"
-                className="w-75 mx-auto block mt-6 p-2 rounded-full text-xl font-semibold
-                 bg-linear-to-r from-cyan-400 via-violet-500 to-purple-500
-                 text-white shadow-xl
-                 hover:scale-105 transition-transform"
+                className="w-full md:w-3/4 mx-auto block mt-6 p-2 rounded-full text-xl font-semibold
+                     bg-linear-to-r from-cyan-400 via-violet-500 to-purple-500
+                     text-white shadow-xl
+                     hover:scale-105 transition-transform"
               >
                 Sign Up
               </button>

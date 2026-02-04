@@ -1,6 +1,7 @@
 import express from 'express'
 import messageModel from '../models/messageModel.js';
 import chatModel from '../models/chatModel.js';
+import { io } from '../app.js';
 
 export const getMessages = async (req, res) => {
     try {
@@ -33,7 +34,7 @@ export const createMessages = async (req, res) => {
         // console.log("➡️ content:", req.body.content);
 
         const { content } = req.body;
-        const { chatId } = req.params; 
+        const { chatId } = req.params;
         const userId = req.user._id;  // <-- verify this exists!
 
         if (!content || !chatId) {
@@ -57,7 +58,7 @@ export const createMessages = async (req, res) => {
         // console.log(fullMessage);
 
         await chatModel.findByIdAndUpdate(chatId, { latestMessage: fullMessage._id });
-
+        io.to(chatId).emit("receiveMessage", fullMessage);
         return res.status(200).json({
             success: true,
             message: "Message created successfully",

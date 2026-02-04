@@ -36,7 +36,7 @@ const Login = () => {
         password: ""
       });
       setShowPassword(false);
-      navigate("/chat" , {replace:true});
+      navigate("/chat", { replace: true });
     } catch (error) {
       console.error("❌ Login failed:", error.response?.data?.message);
       if (error.response?.status === 404) {
@@ -48,9 +48,12 @@ const Login = () => {
 
 
   return (
-    <div className="p-10 bg-linear-to-b from-cyan-200 via-violet-400 to-purple-500 h-screen flex justify-center items-center">
-      <div className='bg-white flex  rounded-2xl shadow-2xl/30   h-[90vh] w-[90vw]  '>
-        <div className="bg-linear-to-b p-0.5 from-cyan-200 via-violet-400 to-purple-500 border-r-2 border-cyan-300 rounded-l-2xl h-full w-1/3">
+    <div className="min-h-screen px-4 md:px-10 bg-linear-to-b from-cyan-200 via-violet-400 to-purple-500 flex justify-center items-center md:items-center">
+
+      <div className="bg-white flex flex-col md:flex-row rounded-2xl shadow-2xl/30 w-full max-w-6xl min-h-[90vh] md:min-h-[80vh] overflow-hidden">
+
+        <div className="hidden md:flex bg-linear-to-b p-0.5 from-cyan-200 via-violet-400 to-purple-500 border-r-2 border-cyan-300 w-1/3 flex-col">
+
           <div className=" h-40 w-full rounded-l-xl flex justify-center items-center flex-col mt-20 ">
             <img className='invert' width={80} src="image.png" alt="" />
             <p className='text-4xl font-semibold text-white'><span>&lt;</span> Chatify<span>/&gt;</span></p>
@@ -61,11 +64,10 @@ const Login = () => {
             <p className='text-white text-3xl  mt-6'>Enjoy...!</p>
           </div>
         </div>
-        <div className="flex rounded-r-xl justify-center w-2/3 items-center bg-red-50">
-          <div className=" w-150 max-w-[90%] h-125
-                
-                backdrop-blur-xl shadow-2xl shadow-purple-400/40 
-                p-6 rounded-2xl">
+        <div className="flex justify-center items-center min-h-full py-30 w-full md:w-2/3 bg-red-50 px-4">
+
+          <div className="w-full max-w-md backdrop-blur-xl  shadow-2xl shadow-purple-400/40 p-6 rounded-2xl">
+
 
             <h1 className="text-[#34495E] text-center text-4xl font-semibold font-roboto">
               Login to your account
@@ -142,7 +144,7 @@ const Login = () => {
               {/* Button */}
               <button
                 type="submit"
-                className="w-75 mx-auto block mt-6 p-2 rounded-full text-xl font-semibold
+                className="w-full md:w-3/4 mx-auto block mt-6 p-2 rounded-full text-xl font-semibold
                  bg-linear-to-r from-cyan-400 via-violet-500 to-purple-500
                  text-white shadow-xl
                  hover:scale-105 transition-transform"

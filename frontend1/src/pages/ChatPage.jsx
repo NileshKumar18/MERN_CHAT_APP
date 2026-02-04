@@ -1,9 +1,10 @@
 import { IoMdSend } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
-import { useContext, useEffect, useState } from "react";
+import { useRef, useContext, useEffect, useState, use } from "react";
 import { getAllUsers, createChat } from "../services/chatServices.js";
 import { AuthContext } from "../auth/AuthProvider.jsx";
 import { sendMessage, fetchMessages } from "../services/messageServices.js";
+import socket from "../socket.js";
 
 const ChatPage = () => {
   const { user, authLoading, isAuthenticated } = useContext(AuthContext);
@@ -11,6 +12,14 @@ const ChatPage = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([])
   const [msgToSend, setMsgToSend] = useState("")
+
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   useEffect(() => {
     if (authLoading) return;
@@ -50,6 +59,7 @@ const ChatPage = () => {
       try {
         const res = await fetchMessages(selectedChat._id)
         setMessages(res.data.data)
+        socket.emit("joinChat", selectedChat._id);
         console.log(res.data.data);
 
       } catch (error) {
@@ -59,7 +69,17 @@ const ChatPage = () => {
     fetchMessagesForSelectedChat();
   }, [selectedChat])
 
+  useEffect(() => {
+    socket.on("receiveMessage", (newMessage) => {
+      if (newMessage.chat._id === selectedChat?._id) {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      }
+    })
+    return () => socket.off("receiveMessage");
+  }, [selectedChat])
+
   const handleSendMessage = async () => {
+    if (msgToSend.trim() === "" || !selectedChat) return;
     try {
       const res = await sendMessage(selectedChat._id, msgToSend)
       setMsgToSend("")
@@ -75,14 +95,20 @@ const ChatPage = () => {
     <div className="h-screen w-full bg-linear-to-b from-cyan-200 via-violet-400 to-purple-500 flex">
 
       {/* Sidebar */}
-      <div className="w-75 bg-white/30 backdrop-blur-xl border-r border-white/30 p-4">
+      <div
+        className={`
+    bg-white/30 backdrop-blur-xl border-r border-white/30 p-4
+    w-full md:w-75
+    ${selectedChat ? "hidden md:block" : "block"}
+  `}
+      >
         <h2 className="text-xl font-semibold text-purple-800 mb-4">
           Chats
         </h2>
 
 
         {users.map((user) => (
-          <div key={user._id} onClick={() => handleSelectUser(user._id)} className="flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-white/40 transition mb-2">
+          <div key={user._id} onClick={() => handleSelectUser(user._id)} className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-white/40 transition mb-2 ${selectedChat?.users.includes(user._id) ? "bg-white/60" : ""}`}>
             <FaUserCircle className="text-3xl text-purple-700" />
             <div>
               <p className="font-medium text-purple-900">{user.username}</p>
@@ -95,11 +121,21 @@ const ChatPage = () => {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div
+        className={`
+    flex-1 flex flex-col
+    ${selectedChat ? "block" : "hidden md:flex"}
+  `}
+      >
 
         {/* Chat Header */}
         <div className="h-16 bg-white/30 backdrop-blur-xl border-b border-white/30
                         flex items-center gap-3 px-6">
+          <button className="md:hidden text-purple-700 text-xl"
+            onClick={() => setSelectedChat(null)}
+          >
+            ←
+          </button>
           <FaUserCircle className="text-3xl text-purple-700" />
           <div>
             <p className="font-semibold text-purple-900">{selectedChat?.chatName || "Select a user to start chatting"}</p>
@@ -117,22 +153,26 @@ const ChatPage = () => {
           {messages.map((msg) => {
             const isMine =
               String(msg.sender._id) === String(user._id);
+            const msgTime = new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             return (
               <div
                 key={msg._id}
-                className={`max-w-[60%] p-3 rounded-2xl shadow text-sm
+                className={`max-w-[85%] sm:max-w-[70%] md:max-w-[40%] p-3 rounded-xl shadow text-sm
         ${isMine
-                    ? "ml-auto bg-linear-to-r from-cyan-300 via-violet-400 to-purple-500 text-white"
+                    ? "ml-auto  bg-linear-to-r from-cyan-300 via-violet-400 to-purple-500 text-white"
                     : "bg-white/60 backdrop-blur-lg text-purple-900"
                   }`}
               >
                 {msg.content}
+                <div className="text-xs text-purple-700 mt-1 text-right">
+                  {msgTime}
+                </div>
               </div>
             );
           })}
 
-
+          <div ref={bottomRef} />
         </div>
 
         {/* Input Box */}
